@@ -1,0 +1,37 @@
+load "gmsh"
+mesh Th = gmshload("problem.msh");
+
+fespace Vh(Th,P1);
+
+Vh u,v;
+real v0=2.0; //  gradient
+
+int LO=1; // hi cir
+int HI=2; // gnd cir
+int PG=5; // pass_gap
+int BU=6; // upper wall
+int BL=7; // lower wall
+
+problem Laplace(u,v,solver=LU) =
+	int2d(Th)(dx(u)*dx(v) + dy(u)*dy(v))
+//	+ on(HI,u=2.0)
+	- int1d(Th,HI)(v0*v)
+	- int1d(Th,BU)(0.0*v)
+	- int1d(Th,PG)(v0*v)
+	- int1d(Th,BL)(0.0*v)
+//	+ int1d(Th,LO)(v0*v) // no purpose
+	+ on(LO,u=0);
+
+//real error=0.01;
+//for (int i=0;i<1;i++){
+//   Laplace;
+//   Th=adaptmesh(Th,u,err=error);
+//   error=error/2.0;
+//}
+Laplace;
+
+Vh Ex, Ey;
+Ex = -dx(u);
+Ey = -dy(u);
+
+plot(u,[Ex,Ey],wait=true);
