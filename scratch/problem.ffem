@@ -1,6 +1,8 @@
 load "gmsh"
 mesh Th = gmshload("problem.msh");
 
+//plot(Th, wait= true,ps="mesh.eps");
+
 fespace Vh(Th,P1);
 
 Vh u,v;
