@@ -1,3 +1,3 @@
 # electrostatics
 some stuff for electrical simulation  
-![grad](/scratch/problem.pdf?raw=true)
+![grad](/scratch/ffglut_0000.ppm?raw=true)
