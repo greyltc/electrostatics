@@ -1,4 +1,4 @@
 # electrostatics
 some stuff for electrical simulation  
-![grad](/scratch/problem.png)  
-![grad](/scratch/mesh.png)
+![solution](/scratch/problem.png?raw=true)  
+![mesh](/scratch/mesh.png?raw=true)
