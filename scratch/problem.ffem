@@ -34,4 +34,4 @@ Vh Ex, Ey;
 Ex = -dx(u);
 Ey = -dy(u);
 
-plot(u,[Ex,Ey],wait=true,ps="problem.eps");
+plot(u,[Ex,Ey],wait=true,ps="problem.png");
