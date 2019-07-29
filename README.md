@@ -1,3 +1,3 @@
 # electrostatics
 some stuff for electrical simulation  
-![grad](/scratch/problem.eps)
+![grad](/scratch/problem.pdf)
