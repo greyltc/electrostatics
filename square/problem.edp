@@ -1,0 +1,41 @@
+load "gmsh"
+mesh Th = gmshload("square.msh22");
+
+plot(Th, wait= true,ps="square.eps");
+
+fespace Vh(Th,P1);
+
+Vh u,v;
+real Vhi = 1.0; // voltage at hi terminal
+
+// physical entity numbers
+int LO=1; // gnd side
+int HI=2; // 1v side
+int MID=3; // mid way line
+
+problem Laplace(u,v,solver=LU) =
+	int2d(Th)(dx(u)*dx(v) + dy(u)*dy(v))
+	+ on(HI,u=Vhi)
+	+ on(LO,u=0);
+
+Laplace;
+
+Vh Ex, Ey;
+
+Ex = -dx(u);
+Ey = -dy(u);
+
+plot(u,[Ex,Ey],wait=true,ps="solution.eps");
+
+// electric field
+macro E(u) (-N.x*dx(u)-N.y*dy(u))// EOM
+
+real R; // resistance
+real I; // current
+real Rs=10.0; // sheet resistance, in ohm/sq
+
+I = int1d(Th, MID) (E(u)/Rs);
+R = Vhi / I;
+
+cout << "I = " << I << " A" << endl;
+cout << "R = " << R << " Ohm" << endl;
