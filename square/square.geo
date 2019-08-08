@@ -45,3 +45,5 @@ Physical Curve(5) = {5};
 Physical Curve(6) = {3};
 //+
 Physical Curve(7) = {2};
+//+
+Physical Surface("face") = {1};

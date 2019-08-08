@@ -12,6 +12,7 @@ real Vhi = 1.0; // voltage at hi terminal
 int LO=1; // gnd side
 int HI=2; // 1v side
 int MID=3; // mid way line
+int FACE=8; // square surface
 
 problem Laplace(u,v,solver=LU) =
 	int2d(Th)(dx(u)*dx(v) + dy(u)*dy(v))
@@ -20,7 +21,7 @@ problem Laplace(u,v,solver=LU) =
 
 Laplace;
 
-Vh Ex, Ey;
+Vh Ex, Ey, Jx, Jy;
 
 Ex = -dx(u);
 Ey = -dy(u);
@@ -29,12 +30,14 @@ plot(u,[Ex,Ey],wait=true,ps="solution.eps");
 
 // electric field
 macro E(u) (-N.x*dx(u)-N.y*dy(u))// EOM
+//E = 
 
 real R; // resistance
 real I; // current
 real Rs=10.0; // sheet resistance, in ohm/sq
+real sigma=1/Rs; // conductivity
 
-I = int1d(Th, MID) (E(u)/Rs);
+I = int1d(Th, MID) (sigma*E(u));
 R = Vhi / I;
 
 cout << "I = " << I << " A" << endl;
