@@ -14,14 +14,18 @@ int HI=2; // 1v side
 int MID=3; // mid way line
 int FACE=8; // square surface
 
+NewMacro grad(u) [dx(u), dy(u)] EndMacro // 2d case
+//NewMacro grad(u) [dx(u), dy(u), dz(u)] EndMacro // 3d case
+
 problem Laplace(u,v,solver=LU) =
-	int2d(Th)(dx(u)*dx(v) + dy(u)*dy(v))
+	int2d(Th)( grad(u)'*grad(v) )
 	+ on(HI,u=Vhi)
 	+ on(LO,u=0);
 
 Laplace;
 
-Vh Ex, Ey, Jx, Jy;
+Vh Ex, Ey, Ez;
+//Vh Ex, Ey, Jx, Jy;
 
 Ex = -dx(u);
 Ey = -dy(u);
@@ -29,16 +33,20 @@ Ey = -dy(u);
 plot(u,[Ex,Ey],wait=true,ps="solution.eps");
 
 // electric field
-macro E(u) (-N.x*dx(u)-N.y*dy(u))// EOM
+//macro E(u) (-N.x*dx(u)-N.y*dy(u))// EOM
 //E = 
 
 real R; // resistance
-real I; // current
+real I; // current flux through center line
+real P; // total power loss
 real Rs=10.0; // sheet resistance, in ohm/sq
 real sigma=1/Rs; // conductivity
 
-I = int1d(Th, MID) (sigma*E(u));
+I = int1d(Th, MID) (sigma*(N.x*Ex+N.y*Ey));
 R = Vhi / I;
+//P = int2d((th,FACE) ()
+P = I^2*R;
 
 cout << "I = " << I << " A" << endl;
 cout << "R = " << R << " Ohm" << endl;
+cout << "P = " << P << " W" << endl;
